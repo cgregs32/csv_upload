@@ -1,17 +1,17 @@
 class Grade < ApplicationRecord
   validates_presence_of :grade_code, :student_id, :course_id
-  validates :grade_code, acceptance: { accept: %w(A B C D E),
-    message: 'should match (A B C D E)'}
+  validates :grade_code, acceptance: {
+    accept: %w(A B C D E),
+    message: 'should match (A B C D E)'
+  }
 
-  validates :course, uniqueness: { scope: [:course_id, :student_id],
-    message: "should be unique by course and student" }
+  validates :course, uniqueness: {
+    scope: [:course_id, :student_id],
+    message: "should be unique by course and student"
+  }
 
   belongs_to :student, foreign_key: 'student_id'
   belongs_to :course, foreign_key: 'course_id'
-
-
-  #create grade entries only for students that exist
-  # && only for courses that exist
 
   def self.handle_csv(csv)
 		messages = csv.map do |row|
@@ -29,12 +29,14 @@ class Grade < ApplicationRecord
         elsif student.nil?
           raise StandardError, "Student - #{student_id}: no records found"
         end
-        Grade.create(
+        grade = Grade.create(
           student_id: student_id,
           course_id: course_id,
           grade_code: grade_code
         )
-        nil
+        raise StandardError,
+        "Grade exists for student #{student_id}, 
+        #{grade.errors.messages[:course].join(',')}"
       rescue => errors
         errors
       end
