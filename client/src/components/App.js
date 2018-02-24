@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
-import { Segment } from 'semantic-ui-react'
-import UploadStudents from './UploadStudents'
-import Flash from './Flash'
+import { Segment, Grid } from 'semantic-ui-react';
+import UploadCSV from './UploadCSV';
+import Flash from './Flash';
 
 class App extends Component {
   render() {
     return (
       <Segment basic>
         <Flash />
-        <UploadStudents />
+        <Grid>
+          <Grid.Row columns={3}>
+            <Grid.Column>
+              <UploadCSV route={'students'} />
+            </Grid.Column>
+            <Grid.Column>
+              <UploadCSV route={'courses'} />
+            </Grid.Column>
+            <Grid.Column>
+              <UploadCSV route={'grades'} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Segment>
     );
   }

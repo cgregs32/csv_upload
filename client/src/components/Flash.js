@@ -1,29 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { clearFlash } from '../actions/flash';
-import {
-  Message,
-  Container,
-  Header,
-} from 'semantic-ui-react';
-
+import { Message, Container, Header } from 'semantic-ui-react';
 
 const fadeFlash = dispatch => {
   setTimeout(() => {
     dispatch(clearFlash());
-  }, 2000);
+  }, 5000);
 };
 
+const displayMessages = messages => (
+  <ul>{messages.map(message => <li>{message}</li>)}</ul>
+);
+
 const Flash = ({ flash, dispatch }) => {
-  debugger
-  if (flash && flash.message) {
+  if (flash.message) {
     return (
       <Container>
-        <Message
-          onDismiss={() => dispatch(clearFlash())}
-          color={flash.color}
-        >
-          <Header as='h5' textAlign='center'>{flash.message}</Header>
+        <Message onDismiss={() => dispatch(clearFlash())} color={flash.color}>
+          <Header as="h5" textAlign="left">
+            {Array.isArray(flash.message)
+              ? displayMessages(flash.message)
+              : flash.message}
+          </Header>
           {fadeFlash(dispatch)}
         </Message>
       </Container>

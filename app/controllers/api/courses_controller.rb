@@ -3,5 +3,6 @@ class Api::CoursesController < ApplicationController
   end
 
   def create
+    
   end
 end
