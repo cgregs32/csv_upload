@@ -8,11 +8,10 @@ class Api::StudentsController < ApplicationController
     csv_text = File.read(params[:file].tempfile)
     csv = CSV.parse(csv_text, headers: true, header_converters: :symbol)
     errors = Student.handle_csv(csv)
-    binding.pry
     if errors.any?
-      render json: errors: {errors}
+      render json: { errors: errors }, status: 422
     else
-      render json: message: { ['completed upload'] }
+      render json: { message: 'completed upload' }
     end
   end
 
