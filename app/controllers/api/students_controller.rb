@@ -1,9 +1,10 @@
 class Api::StudentsController < ApplicationController
 
   def index
+    render json: Student.all
   end
 
-  def create
+  def mass_upload
     csv = csv_format(params[:file].tempfile)
     count = csv[:row_count].length
     messages = Student.handle_csv(csv)

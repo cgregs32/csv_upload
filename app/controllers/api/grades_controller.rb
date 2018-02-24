@@ -1,8 +1,10 @@
 class Api::GradesController < ApplicationController
+
   def index
+    render json: Grade.with_user_and_course
   end
 
-  def create
+  def mass_upload
     csv = csv_format(params[:file].tempfile)
     count = csv[:row_count].length
     errors = Grade.handle_csv(csv)

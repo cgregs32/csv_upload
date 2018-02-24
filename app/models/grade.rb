@@ -13,6 +13,10 @@ class Grade < ApplicationRecord
   belongs_to :student, foreign_key: 'student_id'
   belongs_to :course, foreign_key: 'course_id'
 
+  def self.with_user_and_course
+    #join grades user and course data
+  end
+
   def self.handle_csv(csv)
 		messages = csv.map do |row|
       begin
@@ -35,7 +39,7 @@ class Grade < ApplicationRecord
           grade_code: grade_code
         )
         raise StandardError,
-        "Grade exists for student #{student_id}, 
+        "Grade exists for student #{student_id},
         #{grade.errors.messages[:course].join(',')}"
       rescue => errors
         errors

@@ -1,8 +1,10 @@
 class Api::CoursesController < ApplicationController
+
   def index
+    render json: Course.all
   end
 
-  def create
+  def mass_upload
     csv = csv_format(params[:file].tempfile)
     count = csv[:row_count].length
     errors = Course.handle_csv(csv)
