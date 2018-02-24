@@ -10,7 +10,7 @@ const fadeFlash = dispatch => {
 };
 
 const displayMessages = messages => (
-  <ul>{messages.map(message => <li>{message}</li>)}</ul>
+  <ul>{messages.map((message, i) => <li key={i}>{message}</li>)}</ul>
 );
 
 const Flash = ({ flash, dispatch }) => {

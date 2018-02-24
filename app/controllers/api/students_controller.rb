@@ -1,23 +1,16 @@
-require 'csv'
-
 class Api::StudentsController < ApplicationController
+
   def index
   end
 
   def create
-    csv_text = File.read(params[:file].tempfile)
-    csv = CSV.parse(csv_text, headers: true, header_converters: :symbol)
-    errors = Student.handle_csv(csv)
-    if errors.any?
-      render json: { errors: errors }, status: 422
+    csv = csv_format(params[:file].tempfile)
+    messages = Student.handle_csv(csv)
+    if messages.any?
+      render json: { errors: messages }, status: 422
     else
-      render json: { message: 'completed upload' }
+      render json: { message: 'All students uploaded' }
     end
   end
 
-  private
-
-    def student_params
-      params.require(:student).permit(:full_name)
-    end
 end

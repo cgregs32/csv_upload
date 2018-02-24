@@ -13,20 +13,23 @@ class UploadCSV extends React.Component {
   state = { errors: false };
 
   drop = files => {
+    // todo: only allow specific csv per component
     const file = files[0];
     const data = new FormData();
     data.append('file', file);
+    console.log(files)
     this.postToServer(data)
   };
 
   postToServer = (data) => {
-    axios.post(`/api/${this.props.route}`, data)
+    const {route, dispatch } = this.props
+    axios.post(`/api/${route}`, data)
     .then(res => {
       // successful
       console.log(res);
     })
     .catch(err => {
-      this.props.dispatch(setFlash(err.response.data.errors, 'red'));
+      dispatch(setFlash(err.response.data.errors, 'red'));
     });
   }
 
@@ -34,7 +37,7 @@ class UploadCSV extends React.Component {
     return (
       <Segment>
         <Header>Upload {this.props.route} Data</Header>
-        <DropZone style={styles.drop} onDrop={this.drop}>
+        <DropZone accept={'.csv'} style={styles.drop} onDrop={this.drop}>
           <Button basic icon labelPosition="left">
             <Icon name="file excel outline" />
             Upload CSV

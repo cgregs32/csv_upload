@@ -3,6 +3,9 @@ class Api::CoursesController < ApplicationController
   end
 
   def create
-    
+    csv = csv_format(params[:file].tempfile)
+    errors = Course.handle_csv(csv)
+
+
   end
 end

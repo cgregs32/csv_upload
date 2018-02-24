@@ -7,16 +7,18 @@ class Student < ApplicationRecord
 
   def self.handle_csv(csv)
     errors = []
-			csv.each do |row|
-        begin
-          student_id = row[:student_id].strip.to_i
-          full_name = row[:full_name].strip
-          raise StandardError, "#{full_name} with id #{student_id} already exists" unless Student.find_by_full_name(full_name).nil?
-          student = Student.create(full_name: full_name)
-        rescue => e
-          errors << e
+		csv.each do |row|
+      begin
+        student_id = row[:student_id].strip.to_i
+        full_name = row[:full_name].strip
+        if Student.find_by_full_name(full_name)
+          raise StandardError, "#{full_name} already exists"
         end
-			end
+        student = Student.create(full_name: full_name)
+      rescue => e
+        errors << e
+      end
+		end
     errors
   end
 
