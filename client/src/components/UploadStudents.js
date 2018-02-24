@@ -1,5 +1,7 @@
 import React from 'react'
 import DropZone from 'react-dropzone';
+import { setFlash } from '../actions/flash'
+import { connect } from 'react-redux'
 import axios from 'axios'
 import {
   Segment,
@@ -8,8 +10,12 @@ import {
   Header,
  } from 'semantic-ui-react'
 
+const styles = {
+ drop: { height: 0, marginLeft: '5px' }
+}
 
 class UploadStudents extends React.Component {
+  state = {errors: false}
 
   drop = (files) => {
     const file = files[0];
@@ -22,6 +28,7 @@ class UploadStudents extends React.Component {
       })
       .catch(err => {
         console.log(err.response)
+        this.props.dispatch(setFlash(err.response.data.errors, 'red'))
       })
   }
 
@@ -30,7 +37,7 @@ class UploadStudents extends React.Component {
 
       <Segment>
         <Header>Upload Student Data</Header>
-        <DropZone onDrop={this.drop}>
+        <DropZone style={styles.drop} onDrop={this.drop}>
           <Button basic icon labelPosition="left">
             <Icon name="file excel outline" />
             Upload CSV
@@ -41,4 +48,4 @@ class UploadStudents extends React.Component {
   }
 }
 
-export default UploadStudents;
+export default connect()(UploadStudents);
