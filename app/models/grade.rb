@@ -38,9 +38,12 @@ class Grade < ApplicationRecord
           course_id: course_id,
           grade_code: grade_code
         )
-        raise StandardError,
-        "Grade exists for student #{student_id},
-        #{grade.errors.messages[:course].join(',')}"
+        if grade.errors.any?
+          raise StandardError,
+          "Grade exists for student #{student_id},
+          #{grade.errors.messages[:course].join(',')}"
+        end
+        nil
       rescue => errors
         errors
       end

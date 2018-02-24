@@ -19,23 +19,34 @@ class UploadCSV extends React.Component {
     const file = files[0];
     const data = new FormData();
     data.append('file', file);
-    debugger
-    this.acceptSpecificFile(file, data);
+    // this.acceptSpecificFile(file, data)
+    this.postToServer(data)
+    // this.acceptSpecificFile(file, data);
   };
 
-  acceptSpecificFile = (file, data) => {
-    let filePrefix = file.name.split('.')[0];
-    if (filePrefix === 'classes') filePrefix = 'courses';
-    if (this.props.route === filePrefix) this.postToServer(data);
-    this.props.dispatch(
-      setFlash([`Can only upload files prefixed: ${filePrefix}`], 'red')
-    );
-  };
+  // readFile = (file) => {
+  //   const reader = new FileReader();
+  //   debugger
+  //   reader.onload = () => {
+  //       file.preview.parse(reader.result, (err, data) => {
+  //           console.log(data);
+  //       });
+  //   };
+  // }
+
+  // acceptSpecificFile = (file, data) => {
+  //   let filePrefix = file.name.split('.')[0];
+  //   if (filePrefix === 'classes') filePrefix = 'courses';
+  //   if (this.props.route === filePrefix) ;
+  //   this.props.dispatch(
+  //     setFlash([`Can only upload files prefixed: ${filePrefix}`], 'red')
+  //   );
+  // };
 
   postToServer = data => {
     const { route, dispatch } = this.props;
     axios
-      .post(`/api/${route}/mass_upload`, data)
+      .post(`/api/${route}/mass_upload?route=${route}`, data)
       .then(res => {
         this.setState({ loaded: true });
         dispatch(setFlash(res.data.message, 'green'));
