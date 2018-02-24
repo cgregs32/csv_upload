@@ -6,16 +6,15 @@ class Grade < ApplicationRecord
   validates :course, uniqueness: { scope: [:course_id, :student_id],
     message: "should be unique by course and student" }
 
-  belongs_to :student, :primary_key => 'student_id'
-  belongs_to :course, :primary_key => 'course_id'
+  belongs_to :student, foreign_key: 'student_id'
+  belongs_to :course, foreign_key: 'course_id'
 
 
   #create grade entries only for students that exist
   # && only for courses that exist
 
   def self.handle_csv(csv)
-    errors = []
-		csv.each do |row|
+		messages = csv.map do |row|
       begin
         student_id = row[:student_id].to_i
         course_id = row[:class_id].to_i
@@ -24,22 +23,22 @@ class Grade < ApplicationRecord
         course = Course.find_by_course_id(course_id)
         if course.nil? && student.nil?
           raise StandardError,
-          "No records found for Student: #{student_id} | Course: #{course_id}"
+          "No records found for Student: #{student_id} or Course: #{course_id}"
         elsif course.nil?
           raise StandardError, "Course - #{course_id}: no records found"
         elsif student.nil?
           raise StandardError, "Student - #{student_id}: no records found"
         end
-        grade = Grade.create(
+        Grade.create(
           student_id: student_id,
           course_id: course_id,
           grade_code: grade_code
         )
-      rescue => e
-        errors << e
+        nil
+      rescue => errors
+        errors
       end
 		end
-    errors
   end
 
 end
