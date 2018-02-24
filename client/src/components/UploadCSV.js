@@ -10,39 +10,48 @@ const styles = {
 };
 
 class UploadCSV extends React.Component {
-  state = { errors: false };
+  state = { loaded: false };
 
   drop = files => {
     // todo: only allow specific csv per component
     const file = files[0];
     const data = new FormData();
     data.append('file', file);
-    console.log(files)
-    this.postToServer(data)
+    this.acceptSpecificFile(file, data);
   };
 
-  postToServer = (data) => {
-    const {route, dispatch } = this.props
-    axios.post(`/api/${route}`, data)
-    .then(res => {
-      // successful
-      dispatch(setFlash(res.data.message, 'green'));
+  acceptSpecificFile = (file, data) => {
+    let filePrefix = file.name.split('.')[0];
+    if (filePrefix === 'classes') filePrefix = 'courses';
+    debugger;
+    if (this.props.route === filePrefix) this.postToServer(data);
+    this.props.dispatch(
+      setFlash([`Can only upload files prefixed: ${filePrefix}`], 'red')
+    );
+  };
 
-      console.log(res);
-    })
-    .catch(err => {
-      dispatch(setFlash(err.response.data.errors, 'red'));
-    });
-  }
+  postToServer = data => {
+    const { route, dispatch } = this.props;
+    axios
+      .post(`/api/${route}`, data)
+      .then(res => {
+        this.setState({ loaded: true });
+        dispatch(setFlash(res.data.message, 'green'));
+      })
+      .catch(err => {
+        dispatch(setFlash(err.response.data.errors, 'red'));
+      });
+  };
 
   render() {
+    const { route } = this.props
     return (
       <Segment>
-        <Header>Upload {this.props.route} Data</Header>
+        <Header>Upload { route } Data</Header>
         <DropZone accept={'.csv'} style={styles.drop} onDrop={this.drop}>
           <Button basic icon labelPosition="left">
             <Icon name="file excel outline" />
-            Upload CSV
+            { route } CSV
           </Button>
         </DropZone>
       </Segment>
