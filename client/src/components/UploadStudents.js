@@ -12,6 +12,10 @@ import {
 class UploadStudents extends React.Component {
 
   drop = (files) => {
+    const file = files[0];
+    const data = new FormData();
+    data.append('file', file)
+    debugger
     axios.post("/api/students", data)
   }
 

@@ -1,15 +1,13 @@
+require 'csv'
+
 class Api::StudentsController < ApplicationController
   def index
   end
 
   def create
-    student = Student.new(student_params)
-    binding.pry
-    if student.save
-      render json: student
-    else
-      render json: { errors: student.errors.full_messages }, status: 422
-    end
+    csv_text = File.read(params[:file].tempfile)
+    csv = CSV.parse(csv_text, headers: true, header_converters: :symbol)
+    Student.handle_csv(csv)
   end
 
   private
