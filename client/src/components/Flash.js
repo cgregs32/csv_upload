@@ -19,9 +19,7 @@ const Flash = ({ flash, dispatch }) => {
       <Container>
         <Message onDismiss={() => dispatch(clearFlash())} color={flash.color}>
           <Header as="h5" textAlign="left">
-            {Array.isArray(flash.message)
-              ? displayMessages(flash.message)
-              : flash.message}
+            { displayMessages(flash.message) }
           </Header>
           {fadeFlash(dispatch)}
         </Message>

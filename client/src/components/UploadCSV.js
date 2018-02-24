@@ -26,6 +26,8 @@ class UploadCSV extends React.Component {
     axios.post(`/api/${route}`, data)
     .then(res => {
       // successful
+      dispatch(setFlash(res.data.message, 'green'));
+
       console.log(res);
     })
     .catch(err => {

@@ -9,7 +9,7 @@ class Api::StudentsController < ApplicationController
     if messages.any?
       render json: { errors: messages }, status: 422
     else
-      render json: { message: 'All students uploaded' }
+      render json: { message: ['All students successfully uploaded'] }
     end
   end
 
