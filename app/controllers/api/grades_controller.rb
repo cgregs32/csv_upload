@@ -5,6 +5,5 @@ class Api::GradesController < ApplicationController
   def create
     csv = csv_format(params[:file].tempfile)
     errors = Grade.handle_csv(csv)
-
   end
 end

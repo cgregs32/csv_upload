@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 20180223214011) do
 
   create_table "courses", force: :cascade do |t|
     t.string "course_name", null: false
+    t.integer "course_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -33,6 +34,7 @@ ActiveRecord::Schema.define(version: 20180223214011) do
 
   create_table "students", force: :cascade do |t|
     t.string "full_name", null: false
+    t.integer "student_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

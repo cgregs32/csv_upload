@@ -7,7 +7,7 @@ class Api::CoursesController < ApplicationController
     count = csv[:row_count].length
     errors = Course.handle_csv(csv)
     if errors.any?
-      render json: { errors: messages }, status: 422
+      render json: { errors: errors }, status: 422
     else
       render json: { message: ["All #{count} entries successfully uploaded"] }
     end
