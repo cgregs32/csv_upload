@@ -7,7 +7,13 @@ class Api::StudentsController < ApplicationController
   def create
     csv_text = File.read(params[:file].tempfile)
     csv = CSV.parse(csv_text, headers: true, header_converters: :symbol)
-    Student.handle_csv(csv)
+    errors = Student.handle_csv(csv)
+    binding.pry
+    if errors.any?
+      render json: errors: {errors}
+    else
+      render json: message: { ['completed upload'] }
+    end
   end
 
   private

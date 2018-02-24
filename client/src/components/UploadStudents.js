@@ -15,8 +15,14 @@ class UploadStudents extends React.Component {
     const file = files[0];
     const data = new FormData();
     data.append('file', file)
-    debugger
     axios.post("/api/students", data)
+      .then(res => {
+        // successful
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   render () {
