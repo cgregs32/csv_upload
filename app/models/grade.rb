@@ -17,16 +17,24 @@ class Grade < ApplicationRecord
     errors = []
 		csv.each do |row|
       begin
-        binding.pry
         student_id = row[:student_id].to_i
         course_id = row[:class_id].to_i
         grade_code = row[:grade].strip
-
-        # full_name = row[:full_name].strip
-        # if Student.find_by_full_name(full_name)
-        #   raise StandardError, "#{full_name} already exists"
-        # end
-        # student = Student.create(full_name: full_name)
+        student = Student.find_by_student_id(student_id)
+        course = Course.find_by_course_id(course_id)
+        if course.nil? && student.nil?
+          raise StandardError,
+          "No records found for Student: #{student_id} | Course: #{course_id}"
+        elsif course.nil?
+          raise StandardError, "Course - #{course_id}: no records found"
+        elsif student.nil?
+          raise StandardError, "Student - #{student_id}: no records found"
+        end
+        grade = Grade.create(
+          student_id: student_id,
+          course_id: course_id,
+          grade_code: grade_code
+        )
       rescue => e
         errors << e
       end
