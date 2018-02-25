@@ -37,14 +37,15 @@ class UploadCSV extends React.Component {
   render() {
     const { route } = this.props
     const { loaded } = this.state
+    const routeText = route.charAt(0).toUpperCase() + route.slice(1);
     return (
       <Segment basic>
         <Segment style={styles.container}>
-          <Header>Upload { route } Data</Header>
+          <Header>Upload { routeText } Data</Header>
           <DropZone accept={'.csv'} style={styles.drop} onDrop={this.drop}>
             <Button basic icon labelPosition="left">
               <Icon name="file excel outline" />
-              { route } CSV
+              Upload { routeText } CSV
             </Button>
           </DropZone>
         </Segment>
