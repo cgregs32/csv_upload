@@ -1,24 +1,17 @@
-# README
+# CSV Upload
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Using rails version 2.3.1
 
-Things you may want to cover:
+Clone Project:  `git clone git@github.com:cgregs32/csv_upload.git`
 
-* Ruby version
+Enter project folder: `cd csv_upload`
 
-* System dependencies
+Bundle: `bundle exec bundle install`
 
-* Configuration
+Create database and migrate `bundle exec rails db:create db:migrate`
 
-* Database creation
+Start rails server: `rails server -p 3001`
 
-* Database initialization
+Enter client and install dependencies:  `cd client && yarn`
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Start client development server `yarn start`

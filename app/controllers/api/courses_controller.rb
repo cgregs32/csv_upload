@@ -20,4 +20,5 @@ class Api::CoursesController < ApplicationController
       end
     end
   end
+  
 end

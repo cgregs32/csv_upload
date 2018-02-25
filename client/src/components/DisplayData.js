@@ -1,19 +1,19 @@
 import React from 'react';
 import axios from 'axios';
+import { setFlash } from '../actions/flash';
 import { Segment, Table, Header } from 'semantic-ui-react';
 
 class DisplayData extends React.Component {
   state = { loaded: false, data: [] };
 
   componentDidMount() {
-    const { route } = this.props;
-    axios
-      .get(`/api/${route}`)
+    const { route, dispatch } = this.props;
+    axios.get(`/api/${route}`)
       .then(res => {
         this.setState({ loaded: true, data: res.data });
       })
       .catch(err => {
-        //handle error
+        dispatch(setFlash('Sorry, We Could not retreive your data', 'red'))
       });
   }
 
