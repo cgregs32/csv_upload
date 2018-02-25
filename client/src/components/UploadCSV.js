@@ -15,33 +15,11 @@ class UploadCSV extends React.Component {
   state = { loaded: false };
 
   drop = files => {
-    // todo: only allow specific csv per component
     const file = files[0];
     const data = new FormData();
     data.append('file', file);
-    // this.acceptSpecificFile(file, data)
     this.postToServer(data)
-    // this.acceptSpecificFile(file, data);
   };
-
-  // readFile = (file) => {
-  //   const reader = new FileReader();
-  //   debugger
-  //   reader.onload = () => {
-  //       file.preview.parse(reader.result, (err, data) => {
-  //           console.log(data);
-  //       });
-  //   };
-  // }
-
-  // acceptSpecificFile = (file, data) => {
-  //   let filePrefix = file.name.split('.')[0];
-  //   if (filePrefix === 'classes') filePrefix = 'courses';
-  //   if (this.props.route === filePrefix) ;
-  //   this.props.dispatch(
-  //     setFlash([`Can only upload files prefixed: ${filePrefix}`], 'red')
-  //   );
-  // };
 
   postToServer = data => {
     const { route, dispatch } = this.props;
@@ -53,7 +31,7 @@ class UploadCSV extends React.Component {
       })
       .catch(err => {
         dispatch(setFlash(err.response.data.errors, 'red'));
-      });
+    });
   };
 
   render() {

@@ -7,14 +7,17 @@ class Grade < ApplicationRecord
 
   validates :course, uniqueness: {
     scope: [:course_id, :student_id],
-    message: "should be unique by course and student"
+    message: 'should be unique by course and student'
   }
 
-  belongs_to :student, foreign_key: 'student_id'
-  belongs_to :course, foreign_key: 'course_id'
+  belongs_to :student, class_name: "Student", foreign_key: "student_id"
+  belongs_to :course, class_name: "Course", foreign_key: "course_id"
 
   def self.with_user_and_course
-    #join grades user and course data
+    select("students.student_id, students.full_name, grades.grade_code,
+            courses.course_name")
+    .joins("INNER JOIN students ON grades.student_id = students.student_id
+            INNER JOIN courses ON grades.course_id = courses.course_id")
   end
 
   def self.handle_csv(csv)
@@ -33,6 +36,7 @@ class Grade < ApplicationRecord
         elsif student.nil?
           raise StandardError, "Student - #{student_id}: no records found"
         end
+        binding.pry
         grade = Grade.create(
           student_id: student_id,
           course_id: course_id,

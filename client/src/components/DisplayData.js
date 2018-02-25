@@ -17,7 +17,6 @@ class DisplayData extends React.Component {
     const { route } = this.props
     axios.get(`/api/${route}`)
       .then(res => {
-        debugger
         this.setState({ loaded: true, data: res.data })
       })
       .catch(err => {
@@ -25,17 +24,42 @@ class DisplayData extends React.Component {
     })
   }
 
-  // createTableRows = () => {
-  //   this.state.data.map(row => {
-  //     return(
-  //       <Table.Row>
-  //         <Table.Cell>{data.name}</Table.Cell>
-  //         <Table.Cell as={CellSelection}>{data.email}</Table.Cell>
-  //         <Table.Cell as={CellSelection}>{data.phone}</Table.Cell>
-  //       </Table.Row>
-  //     )
-  //   })
-  // }
+  configureData = (row) => {
+    let data;
+    switch(this.props.route){
+      case 'students':
+        data = {option1: row.student_id, option2: row.full_name}
+        break
+      case 'courses':
+        data = {option1: row.course_id, option2: row.course_name}
+        break
+      case 'grades':
+        data = {
+          option1: row.student_id,
+          option2: row.course_name,
+          option3: row.student_name,
+          option4: row.grade_code
+        }
+    }
+    return data
+  }
+
+  createTableRows = () => {
+    return this.state.data.map(row => {
+      let data = this.configureData(row)
+      return(
+        <Table.Row>
+          <Table.Cell>{ data.option1 }</Table.Cell>
+          <Table.Cell>{ data.option2 }</Table.Cell>
+          { data.option3 && <Table.Cell>{ data.option3 }</Table.Cell> }
+          { data.option4 && <Table.Cell>{ data.option4 }</Table.Cell> }
+        </Table.Row>
+      )
+    })
+  }
+
+  normalizeHeaders = () => {
+  }
 
   render () {
     let { route } = this.props
@@ -47,18 +71,14 @@ class DisplayData extends React.Component {
         <Table celled fixed singleLine>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell >Course</Table.HeaderCell>
-              <Table.HeaderCell >
-                <Header as='h2'>Email Address</Header>
-                placeholder
-              </Table.HeaderCell>
-              <Table.HeaderCell >
-                <Header as='h2'>Phone Number</Header>
-              </Table.HeaderCell>
+              <Table.HeaderCell>Data 1</Table.HeaderCell>
+              <Table.HeaderCell>Data 2</Table.HeaderCell>
+              {route === 'grades' && <Table.HeaderCell>Data 3</Table.HeaderCell>}
+              {route === 'grades' && <Table.HeaderCell>Data 4</Table.HeaderCell>}
             </Table.Row>
           </Table.Header>
-          { loaded && this.createTableRows(data) }
 
+          { loaded && this.createTableRows()}
 
           <Table.Body>
 
